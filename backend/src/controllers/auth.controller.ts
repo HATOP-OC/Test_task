@@ -14,6 +14,6 @@ export async function login(req: Request, res: Response) {
 
 export async function me(req: Request, res: Response) {
   if (!req.user) throw AppError.unauthorized()
-  const user = await authService.getMe(req.user.id)
+  const user = await authService.getMe(req.user!.id)
   res.json({ user })
 }

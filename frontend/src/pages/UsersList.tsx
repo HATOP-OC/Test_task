@@ -68,7 +68,11 @@ export default function UsersList() {
             <tbody className="divide-y divide-slate-100">
               {users.map((u) => (
                 <tr key={u.id} className="hover:bg-slate-50">
-                  <td className="px-4 py-3 font-medium text-slate-900">{u.name}</td>
+                  <td className="px-4 py-3 font-medium text-slate-900">
+                    <Link to={`/users/${u.id}`} className="hover:text-blue-600 hover:underline">
+                      {u.name}
+                    </Link>
+                  </td>
                   <td className="px-4 py-3 text-slate-600">{u.email}</td>
                   <td className="px-4 py-3">
                     <span

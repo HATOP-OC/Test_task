@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import type { FormEvent } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams, Navigate } from "react-router-dom"
 import { booksService } from "../services/books.service"
 import { extractErrorMessage } from "../services/api"
+import { useAuth } from "../context/AuthContext"
 
 export default function BookForm() {
+  const { user } = useAuth()
   const { id } = useParams<{ id: string }>()
   const isEdit = Boolean(id)
   const navigate = useNavigate()
@@ -28,6 +30,10 @@ export default function BookForm() {
       .catch((err) => setError(extractErrorMessage(err)))
       .finally(() => setLoading(false))
   }, [id])
+
+  if (user?.role !== "admin") {
+    return <Navigate to="/books" replace />
+  }
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault()

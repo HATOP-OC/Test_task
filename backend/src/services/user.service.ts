@@ -3,6 +3,7 @@ import { Role } from "@prisma/client"
 import { prisma } from "../config/prisma"
 import { AppError } from "../utils/AppError"
 import { CreateUserInput, UpdateUserInput } from "../schemas/user.schema"
+import { Prisma } from "@prisma/client" 
 
 const SALT_ROUNDS = 10
 
@@ -42,11 +43,13 @@ export async function createUser(input: CreateUserInput) {
 }
 
 export async function updateUser(id: string, input: UpdateUserInput) {
-  const data: Record<string, unknown> = { ...input }
+  const updateData: Prisma.UserUpdateInput = { ...input }
+  
   if (input.password) {
-    data.password = await bcrypt.hash(input.password, SALT_ROUNDS)
+    updateData.password = await bcrypt.hash(input.password, SALT_ROUNDS)
   }
-  return prisma.user.update({ where: { id }, data, select: publicSelect })
+  
+  return prisma.user.update({ where: { id }, data: updateData, select: publicSelect })
 }
 
 export async function deleteUser(id: string, currentUserId: string) {
